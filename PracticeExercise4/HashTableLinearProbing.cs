@@ -2,23 +2,23 @@
 
 namespace PracticeExercise4
 {
-	public class HashTableLinearProbing<K,V>: IHashTable<K,V>
-	{
+    public class HashTableLinearProbing<K, V> : IHashTable<K, V>
+    {
 
         private Bucket<K, V>[] buckets;
         private int initialCapacity = 16;
 
 
-		public HashTableLinearProbing()
-		{
+        public HashTableLinearProbing()
+        {
             buckets = new Bucket<K, V>[initialCapacity];
 
-            for(int i= 0; i < buckets.Length; i++)
+            for (int i = 0; i < buckets.Length; i++)
             {
                 buckets[i] = new Bucket<K, V>();
             }
 
-		}
+        }
 
         private int count;
         private readonly double MAX_LOAD_FACTOR = 0.6;
@@ -31,7 +31,7 @@ namespace PracticeExercise4
         // O(n) - worst case
         public bool Add(K key, V value)
         {
-            if( LoadFactor > MAX_LOAD_FACTOR)
+            if (LoadFactor > MAX_LOAD_FACTOR)
             {
                 Resize();
             }
@@ -46,7 +46,7 @@ namespace PracticeExercise4
             while (buckets[bucketIndex].State == BucketState.Full)
             {
                 // if the key already exists, then update it.
-                if(buckets[bucketIndex].Key.Equals( key ))
+                if (buckets[bucketIndex].Key.Equals(key))
                 {
                     buckets[bucketIndex].Value = value;
                     return true;
@@ -55,7 +55,7 @@ namespace PracticeExercise4
 
                 bucketIndex = (bucketIndex + 1) % buckets.Length;
 
-                if( bucketIndex == startingIndex)
+                if (bucketIndex == startingIndex)
                 {
                     throw new OutOfMemoryException();
                 }
@@ -118,7 +118,7 @@ namespace PracticeExercise4
             var oldBuckets = buckets;
 
             buckets = newBuckets;
-            for(int i=0; i < buckets.Length; i++)
+            for (int i = 0; i < buckets.Length; i++)
             {
                 buckets[i] = new Bucket<K, V>();
             }
@@ -126,9 +126,9 @@ namespace PracticeExercise4
             count = 0;
 
             // rehash all the old/existing buckets into the new array/hashtable
-            foreach( var bucket in oldBuckets)
+            foreach (var bucket in oldBuckets)
             {
-                if( bucket.State == BucketState.Full)
+                if (bucket.State == BucketState.Full)
                 {
                     Add(bucket.Key, bucket.Value);
                 }
